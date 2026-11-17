@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DevOps Learning Hub | Nikhil Verma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent-hover: #1f6feb;
+      --success: #238636;
+      --success-light: #2ea043;
+      --danger: #da3633;
+      --text: #c9d1d9;
+      --text-bright: #f0f6fc;
+      --text-muted: #8b949e;
+      --code-bg: #090d13;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 16px;
+    }
+
+    header {
+      max-width: 1400px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title-group h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(88, 166, 255, 0.1);
+      border: 1px solid rgba(88, 166, 255, 0.3);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      min-height: 38px;
+    }
+
+    .btn-primary {
+      background: #e50914;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #b80710;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text-bright);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-success:hover {
+      background: var(--success-light);
+    }
+
+    .progress-banner {
+      max-width: 1400px;
+      margin: 0 auto 16px auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .progress-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-bar-wrap {
+      width: 200px;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .player-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .interactive-panel {
+      padding: 16px 20px;
+    }
+
+    .tab-nav {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      background: rgba(88, 166, 255, 0.12);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .video-details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .video-details-header h2 {
+      font-size: 1.15rem;
+      color: var(--text-bright);
+    }
+
+    .yt-direct-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(229, 9, 20, 0.15);
+      color: #ff6b6b;
+      border: 1px solid rgba(229, 9, 20, 0.4);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Quiz Styling */
+    .quiz-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .quiz-q {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      padding: 10px 14px;
+      border-radius: 6px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.88rem;
+      text-align: left;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .quiz-opt:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(88, 166, 255, 0.05);
+    }
+
+    .quiz-opt.correct {
+      border-color: var(--success);
+      background: rgba(35, 134, 54, 0.2) !important;
+      color: #7ee787;
+      font-weight: 600;
+    }
+
+    .quiz-opt.incorrect {
+      border-color: var(--danger);
+      background: rgba(218, 54, 51, 0.2) !important;
+      color: #ff7b72;
+    }
+
+    .quiz-explanation {
+      margin-top: 10px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+
+    .playlist-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      max-height: 560px;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      background: #1f6feb26;
+      color: var(--accent);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .playlist-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .playlist-item {
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .playlist-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--accent);
+    }
+
+    .playlist-item.active {
+      border-color: var(--accent);
+      background: rgba(88, 166, 255, 0.12);
+    }
+
+    .status-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: transparent;
+    }
+
+    .playlist-item.completed .status-check {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      line-height: 1.3;
+    }
+
+    .item-creator {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .games-grid {
+      grid-column: 1 / -1;
+      margin-top: 10px;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-bright);
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin: 8px 0 12px 0;
+    }
+
+    .card-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .cheatsheet-section {
+      grid-column: 1 / -1;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--text-bright);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #79c0ff;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-group">
+      <h1>☁️ DevOps & Linux Hub</h1>
+      <span class="user-badge">👤 Student: Nikhil Verma</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" onclick="exportProgress()">
+        📋 Copy Progress for Antigravity
+      </button>
+      <a class="btn btn-primary" target="_blank" href="https://www.youtube.com/watch_videos?video_ids=fwP2JW_VnZI,rrB13utjYV4,l9YxTXDiiFY,VbEx7B_PTOE,iwolPf6kN-k,8944biinHgE">
+        ▶️ YouTube Queue
+      </a>
+      <a class="btn btn-secondary" target="_blank" href="https://killercoda.com">
+        💻 Terminal Lab
+      </a>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-banner">
+    <div class="progress-info">
+      <span id="streak-indicator">🔥 Day 1 Active</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <span id="progress-text" style="font-size: 0.85rem; font-weight: 600;">0 of 6 Lessons Completed</span>
+    </div>
+    <div style="font-size: 0.85rem; color: var(--text-muted);">
+      Target: Phase 1 (Week 1) Linux Basics
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Main Video & Interactive Panel -->
+    <div class="player-section">
+      <div class="video-wrapper">
+        <iframe 
+          id="video-frame" 
+          src="https://www.youtube.com/embed/fwP2JW_VnZI?rel=0" 
+          title="DevOps Video Lesson"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      
+      <div class="interactive-panel">
+        <div class="video-details-header">
+          <div>
+            <h2 id="current-title">Linux Commands in 30 Mins (Real-World Example)</h2>
+            <p id="current-desc" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">
+              By TechWorld with Nana
+            </p>
+          </div>
+          <a id="yt-external-link" class="yt-direct-btn" href="https://www.youtube.com/watch?v=fwP2JW_VnZI" target="_blank">
+            ↗ Open in App
+          </a>
+        </div>
+
+        <div class="tab-nav">
+          <button class="tab-btn active" onclick="switchTab('quiz')">📝 Interactive Test</button>
+          <button class="tab-btn" onclick="switchTab('overview')">📖 Lesson Notes</button>
+        </div>
+
+        <!-- Quiz Tab Content -->
+        <div id="tab-quiz" class="tab-content active">
+          <div id="quiz-container">
+            <!-- Quizzes dynamically injected -->
+          </div>
+        </div>
+
+        <!-- Overview Tab Content -->
+        <div id="tab-overview" class="tab-content">
+          <p id="lesson-overview-text" style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
+            Watch the video lesson above, then switch over to the <strong>Interactive Test</strong> tab to answer 3 quick questions and log your completion!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Playlist Menu -->
+    <div class="playlist-section">
+      <div class="section-title">
+        <span>Week 1 Curriculum</span>
+        <span class="badge" id="completed-badge">0 / 6 Done</span>
+      </div>
+      <div class="playlist-items" id="playlist-list">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Practice Games -->
+    <div class="games-grid">
+      <div class="section-title">
+        <span>🎮 Hands-on Games & Labs</span>
+      </div>
+      <div class="cards-row">
+        <div class="card">
+          <div class="card-title">SadServers</div>
+          <p class="card-desc">Troubleshoot broken real-world Linux servers. Try "Saint John" again using what you learned.</p>
+          <a class="card-link" href="https://sadservers.com" target="_blank">Launch SadServers →</a>
+        </div>
+        <div class="card">
+          <div class="card-title">Killercoda</div>
+          <p class="card-desc">Instant cloud Linux and Docker terminals inside your browser. Works seamlessly on iPad touchscreens.</p>
+          <a class="card-link" href="https://killercoda.com" target="_blank">Launch Killercoda →</a>
+        </div>
+        <div class="card">
+          <div class="card-title">OverTheWire: Bandit</div>
+          <p class="card-desc">Level-by-level terminal game designed for complete beginners to learn commands progressively.</p>
+          <a class="card-link" href="https://overthewire.org/wargames/bandit/" target="_blank">Play Bandit 0–10 →</a>
+        </div>
+        <div class="card">
+          <div class="card-title">Linux Journey</div>
+          <p class="card-desc">5-minute visual micro-lessons explaining fundamental concepts before jumping into the terminal.</p>
+          <a class="card-link" href="https://labex.io/linuxjourney" target="_blank">Read Lessons →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Reference -->
+    <div class="cheatsheet-section">
+      <div class="section-title">
+        <span>⚡ Week 1 Quick Reference Card</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Plain English Meaning</th>
+            <th>Example / Common Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>pwd</code></td>
+            <td>"Where am I right now?"</td>
+            <td>Prints current directory path</td>
+          </tr>
+          <tr>
+            <td><code>ls -la</code></td>
+            <td>"Show me everything here"</td>
+            <td>Lists all files, permissions, and hidden dotfiles</td>
+          </tr>
+          <tr>
+            <td><code>cd &lt;folder&gt;</code></td>
+            <td>"Go inside this folder"</td>
+            <td><code>cd /var/log</code> (or <code>cd ..</code> to go up one level)</td>
+          </tr>
+          <tr>
+            <td><code>tail -f &lt;file&gt;</code></td>
+            <td>"Stream logs live"</td>
+            <td><code>tail -f /var/log/bad.log</code> (Exit with <code>Ctrl + C</code>)</td>
+          </tr>
+          <tr>
+            <td><code>lsof &lt;file&gt;</code></td>
+            <td>"Who is using this file right now?"</td>
+            <td><code>lsof /var/log/bad.log</code> (finds the process ID / PID)</td>
+          </tr>
+          <tr>
+            <td><code>kill &lt;PID&gt;</code></td>
+            <td>"Force stop this program"</td>
+            <td><code>kill 595</code> (no brackets!)</td>
+          </tr>
+          <tr>
+            <td><code>grep "keyword" &lt;file&gt;</code></td>
+            <td>"Search inside this file for text"</td>
+            <td><code>grep "ERROR" server.log</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const videos = [
+      {
+        id: "fwP2JW_VnZI",
+        title: "Linux Commands in 30 Mins (Real-World Example)",
+        creator: "TechWorld with Nana",
+        desc: "Essential Linux commands through a realistic troubleshooting scenario investigating app and database logs.",
+        questions: [
+          {
+            q: "Which command reveals which running program or process is currently holding a log file open?",
+            options: ["ps -ef", "lsof /var/log/bad.log", "cat /var/log/bad.log", "chmod +x bad.log"],
+            answer: 1,
+            exp: "lsof stands for 'List Open Files'. It directly shows the process name and PID holding that file."
+          },
+          {
+            q: "If an offending process is running on PID 595, what is the exact command to terminate it?",
+            options: ["kill <595>", "terminate 595", "kill 595", "stop --process 595"],
+            answer: 2,
+            exp: "Type 'kill 595' directly. Angle brackets < > are placeholders and cause bash syntax errors if typed."
+          },
+          {
+            q: "How do you stream a log file in real-time as new lines are being added?",
+            options: ["cat /var/log/app.log", "tail -f /var/log/app.log", "nano /var/log/app.log", "stream /var/log/app.log"],
+            answer: 1,
+            exp: "tail -f follows the file live until you press Ctrl + C."
+          }
+        ]
+      },
+      {
+        id: "rrB13utjYV4",
+        title: "Linux in 100 Seconds",
+        creator: "Fireship",
+        desc: "Fast, visual breakdown of root, /etc, /var, /bin, and the Linux file system hierarchy.",
+        questions: [
+          {
+            q: "Where are editable system-wide configuration files stored in Linux?",
+            options: ["/bin", "/home", "/etc", "/dev"],
+            answer: 2,
+            exp: "/etc stores all configuration files (like nginx.conf, sshd_config, hosts)."
+          },
+          {
+            q: "What does the top-most single slash '/' represent in the Linux file system?",
+            options: ["User home folder", "The root directory (base of everything)", "Temporary storage", "Trash folder"],
+            answer: 1,
+            exp: "The single forward slash '/' is the Root directory from which all other directories branch."
+          },
+          {
+            q: "What is typically stored in the '/var' directory?",
+            options: ["Installed apps and games", "Variable files that constantly grow, like logs and databases", "Bootloader files only", "Source code files only"],
+            answer: 1,
+            exp: "/var holds 'variable' data such as /var/log, mail queues, and database files."
+          }
+        ]
+      },
+      {
+        id: "l9YxTXDiiFY",
+        title: "EVERYONE Needs to Learn LINUX",
+        creator: "NetworkChuck",
+        desc: "Why Linux powers the entire cloud and why every tech engineer uses it.",
+        questions: [
+          {
+            q: "Why do cloud providers and servers overwhelmingly use Linux instead of desktop OSes?",
+            options: ["Linux is cheaper to buy at BestBuy", "Linux is lightweight, modular, rock-solid, and easily automated via CLI", "Linux has better video games", "Linux cannot connect to the internet"],
+            answer: 1,
+            exp: "Linux requires no GUI overhead, uses minimal RAM, and can be completely scripted via code."
+          },
+          {
+            q: "What is the primary command-line interpreter (shell) found on most modern Linux servers?",
+            options: ["PowerShell only", "Command Prompt (CMD)", "Bash (Bourne Again Shell)", "Finder"],
+            answer: 2,
+            exp: "Bash is the default shell on almost all Linux distributions."
+          }
+        ]
+      },
+      {
+        id: "VbEx7B_PTOE",
+        title: "Linux for Hackers // EP 1",
+        creator: "NetworkChuck",
+        desc: "Practical hands-on walkthrough of terminal basics, directories, and navigating safely.",
+        questions: [
+          {
+            q: "What command prints your current working directory path?",
+            options: ["whereami", "pwd", "dir", "cd"],
+            answer: 1,
+            exp: "pwd stands for 'Print Working Directory'."
+          },
+          {
+            q: "How do you navigate up one directory level to the parent folder?",
+            options: ["cd up", "cd ..", "cd /", "back"],
+            answer: 1,
+            exp: "'cd ..' takes you one directory up in the hierarchy."
+          },
+          {
+            q: "Which flag on 'ls' reveals hidden files (files beginning with a dot)?",
+            options: ["ls -h", "ls -la", "ls -x", "ls -hide"],
+            answer: 1,
+            exp: "The '-a' flag in 'ls -la' tells the terminal to show all files, including hidden dotfiles."
+          }
+        ]
+      },
+      {
+        id: "iwolPf6kN-k",
+        title: "Introduction to Linux & Terminal Commands",
+        creator: "Kunal Kushwaha",
+        desc: "Comprehensive beginner-friendly deep dive into Linux files, commands, and permissions for DevOps.",
+        questions: [
+          {
+            q: "Which command changes file read/write/execute permissions in Linux?",
+            options: ["chown", "chmod", "perm", "setfile"],
+            answer: 1,
+            exp: "chmod stands for 'Change Mode' and modifies file permission bits."
+          },
+          {
+            q: "How do you search for lines containing the word 'ERROR' inside a file called server.log?",
+            options: ["find ERROR in server.log", "grep 'ERROR' server.log", "search server.log ERROR", "cat -s ERROR server.log"],
+            answer: 1,
+            exp: "grep is the universal text searching tool in Linux."
+          }
+        ]
+      },
+      {
+        id: "8944biinHgE",
+        title: "Git Explained in 25 Mins (Git & GitHub Tutorial)",
+        creator: "TechWorld with Nana",
+        desc: "How commits, branches, pull requests, and remote repositories work in team projects.",
+        questions: [
+          {
+            q: "Which command downloads an existing repository from GitHub to your computer?",
+            options: ["git copy", "git clone <url>", "git download", "git init"],
+            answer: 1,
+            exp: "git clone downloads the repository and history to your local machine."
+          },
+          {
+            q: "When working with a friend or team, how do you submit changes for review before merging?",
+            options: ["Send an email zip", "Open a Pull Request (PR)", "Force push to main branch", "Delete the repository"],
+            answer: 1,
+            exp: "A Pull Request (PR) allows your teammate to review, comment on, and approve code changes safely."
+          }
+        ]
+      }
+    ];
+
+    let currentVideoIdx = 0;
+    let completedLessons = JSON.parse(localStorage.getItem('devops_completed_lessons') || '[]');
+
+    function saveProgress() {
+      localStorage.setItem('devops_completed_lessons', JSON.stringify(completedLessons));
+      updateProgressUI();
+    }
+
+    function updateProgressUI() {
+      const count = completedLessons.length;
+      document.getElementById('progress-text').textContent = `${count} of ${videos.length} Lessons Completed`;
+      document.getElementById('completed-badge').textContent = `${count} / ${videos.length} Done`;
+      const pct = Math.round((count / videos.length) * 100);
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+
+      document.querySelectorAll('.playlist-item').forEach((item, idx) => {
+        const isDone = completedLessons.includes(idx);
+        item.classList.toggle('completed', isDone);
+        const check = item.querySelector('.status-check');
+        if (check) check.textContent = isDone ? '✓' : '';
+      });
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      if (tabName === 'quiz') {
+        document.querySelector("button[onclick=\"switchTab('quiz')\"]").classList.add('active');
+        document.getElementById('tab-quiz').classList.add('active');
+      } else {
+        document.querySelector("button[onclick=\"switchTab('overview')\"]").classList.add('active');
+        document.getElementById('tab-overview').classList.add('active');
+      }
+    }
+
+    function renderQuiz(videoIdx) {
+      const v = videos[videoIdx];
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+
+      if (!v.questions || v.questions.length === 0) {
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">No quiz questions for this video yet.</p>';
+        return;
+      }
+
+      v.questions.forEach((qObj, qIdx) => {
+        const qCard = document.createElement('div');
+        qCard.className = 'quiz-card';
+        qCard.innerHTML = `
+          <div class="quiz-q">Question ${qIdx + 1}: ${qObj.q}</div>
+          <div class="quiz-options">
+            ${qObj.options.map((opt, optIdx) => `
+              <button class="quiz-opt" onclick="checkAnswer(${videoIdx}, ${qIdx}, ${optIdx}, this)">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div class="quiz-explanation" id="exp-${videoIdx}-${qIdx}">
+            💡 <strong>Explanation:</strong> ${qObj.exp}
+          </div>
+        `;
+        container.appendChild(qCard);
+      });
+    }
+
+    function checkAnswer(videoIdx, qIdx, selectedIdx, btnElem) {
+      const qObj = videos[videoIdx].questions[qIdx];
+      const parent = btnElem.parentElement;
+      const allBtns = parent.querySelectorAll('.quiz-opt');
+      allBtns.forEach(b => b.disabled = true);
+
+      const expElem = document.getElementById(`exp-${videoIdx}-${qIdx}`);
+      if (expElem) expElem.style.display = 'block';
+
+      if (selectedIdx === qObj.answer) {
+        btnElem.classList.add('correct');
+      } else {
+        btnElem.classList.add('incorrect');
+        allBtns[qObj.answer].classList.add('correct');
+      }
+
+      // If all questions answered for this video, mark lesson completed
+      const totalQuestions = videos[videoIdx].questions.length;
+      const answeredInDOM = document.querySelectorAll('#quiz-container .quiz-opt:disabled').length / (qObj.options.length);
+      if (answeredInDOM >= totalQuestions) {
+        if (!completedLessons.includes(videoIdx)) {
+          completedLessons.push(videoIdx);
+          saveProgress();
+        }
+      }
+    }
+
+    function loadVideo(index) {
+      currentVideoIdx = index;
+      const v = videos[index];
+      const iframe = document.getElementById('video-frame');
+      iframe.src = `https://www.youtube.com/embed/${v.id}?rel=0`;
+      document.getElementById('current-title').textContent = v.title;
+      document.getElementById('current-desc').textContent = `By ${v.creator} — ${v.desc}`;
+      document.getElementById('yt-external-link').href = `https://www.youtube.com/watch?v=${v.id}`;
+      document.getElementById('lesson-overview-text').textContent = v.desc;
+
+      document.querySelectorAll('.playlist-item').forEach((item, idx) => {
+        item.classList.toggle('active', idx === index);
+      });
+
+      renderQuiz(index);
+      switchTab('quiz');
+    }
+
+    function exportProgress() {
+      const summary = {
+        student: "Nikhil Verma",
+        completedCount: completedLessons.length,
+        totalLessons: videos.length,
+        completedLessonTitles: completedLessons.map(i => videos[i].title),
+        updatedAt: new Date().toISOString()
+      };
+      const text = `DevOps Progress Report (Nikhil Verma):\nCompleted: ${summary.completedCount}/${summary.totalLessons} Lessons\nFinished:\n${summary.completedLessonTitles.map(t => '• ' + t).join('\n') || 'None yet'}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Progress copied to clipboard! You can paste it into Antigravity chat whenever you check in.");
+      }).catch(() => {
+        alert("Progress:\n" + text);
+      });
+    }
+
+    // Initialize playlist items
+    const playlistContainer = document.getElementById('playlist-list');
+    videos.forEach((video, index) => {
+      const item = document.createElement('div');
+      item.className = `playlist-item ${index === 0 ? 'active' : ''}`;
+      item.onclick = () => loadVideo(index);
+      item.innerHTML = `
+        <div class="status-check"></div>
+        <div class="item-info">
+          <div class="item-title">${video.title}</div>
+          <div class="item-creator">${video.creator}</div>
+        </div>
+      `;
+      playlistContainer.appendChild(item);
+    });
+
+    // Initial render
+    loadVideo(0);
+    updateProgressUI();
+  </script>
+</body>
+</html>
