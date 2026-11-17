@@ -17,6 +17,7 @@
       --success: #238636;
       --success-light: #2ea043;
       --danger: #da3633;
+      --purple: #a371f7;
       --text: #c9d1d9;
       --text-bright: #f0f6fc;
       --text-muted: #8b949e;
@@ -115,13 +116,15 @@
       color: var(--accent);
     }
 
-    .btn-success {
-      background: var(--success);
+    .btn-gemini {
+      background: linear-gradient(135deg, #1f6feb, #8957e5);
       color: #fff;
+      border: none;
     }
 
-    .btn-success:hover {
-      background: var(--success-light);
+    .btn-gemini:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
     }
 
     .progress-banner {
@@ -145,7 +148,7 @@
     }
 
     .progress-bar-wrap {
-      width: 200px;
+      width: 180px;
       height: 8px;
       background: var(--border);
       border-radius: 4px;
@@ -208,6 +211,7 @@
       border-bottom: 1px solid var(--border);
       padding-bottom: 12px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
     }
 
     .tab-btn {
@@ -227,6 +231,11 @@
       background: rgba(88, 166, 255, 0.12);
     }
 
+    .tab-btn.gemini-tab.active {
+      color: var(--purple);
+      background: rgba(163, 113, 247, 0.15);
+    }
+
     .tab-content {
       display: none;
     }
@@ -240,7 +249,7 @@
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .video-details-header h2 {
@@ -263,6 +272,69 @@
       white-space: nowrap;
     }
 
+    /* Gemini Controls Panel */
+    .gemini-header-box {
+      background: rgba(163, 113, 247, 0.08);
+      border: 1px solid rgba(163, 113, 247, 0.25);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .gemini-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #d2a8ff;
+    }
+
+    .gemini-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .gemini-ask-box {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .gemini-input {
+      flex: 1;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-bright);
+      font-size: 0.88rem;
+      font-family: inherit;
+    }
+
+    .gemini-input:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+
+    .gemini-response {
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(163, 113, 247, 0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      color: var(--text-bright);
+      display: none;
+      line-height: 1.5;
+    }
+
     /* Quiz Styling */
     .quiz-card {
       background: rgba(255, 255, 255, 0.02);
@@ -273,7 +345,7 @@
     }
 
     .quiz-q {
-      font-size: 0.95rem;
+      font-size: 0.93rem;
       font-weight: 600;
       color: var(--text-bright);
       margin-bottom: 12px;
@@ -324,6 +396,15 @@
       border-radius: 6px;
       background: rgba(0, 0, 0, 0.2);
       display: none;
+    }
+
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      color: var(--purple);
+      font-weight: 600;
+      font-size: 0.95rem;
     }
 
     .playlist-section {
@@ -559,21 +640,67 @@
         </div>
 
         <div class="tab-nav">
-          <button class="tab-btn active" onclick="switchTab('quiz')">📝 Interactive Test</button>
+          <button class="tab-btn gemini-tab active" onclick="switchTab('gemini')">✨ Gemini AI Drill</button>
+          <button class="tab-btn" onclick="switchTab('quiz')">📝 Quick Test</button>
           <button class="tab-btn" onclick="switchTab('overview')">📖 Lesson Notes</button>
         </div>
 
-        <!-- Quiz Tab Content -->
-        <div id="tab-quiz" class="tab-content active">
+        <!-- Gemini AI Tab Content -->
+        <div id="tab-gemini" class="tab-content active">
+          <div class="gemini-header-box">
+            <div class="gemini-status">
+              <span>🟢</span>
+              <span id="gemini-status-label">Gemini AI Connected (3.5-Flash)</span>
+            </div>
+            <div class="gemini-actions">
+              <button class="btn btn-gemini" onclick="generateGeminiQuestions(5)">
+                ✨ Generate 5 Questions
+              </button>
+              <button class="btn btn-secondary" onclick="generateGeminiQuestions(10)">
+                🔥 Generate 10 Scenarios
+              </button>
+              <button class="btn btn-secondary" onclick="promptApiKey()" title="Configure API Key">
+                ⚙️ Key
+              </button>
+            </div>
+          </div>
+
+          <!-- Spinner -->
+          <div id="gemini-loading" class="loading-spinner">
+            ⏳ Gemini is analyzing this video and generating custom interactive questions...
+          </div>
+
+          <!-- Dynamic Questions Container -->
+          <div id="gemini-quiz-container">
+            <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px 0;">
+              Click <strong>"✨ Generate 5 Questions"</strong> or <strong>"🔥 Generate 10 Scenarios"</strong> above to generate dynamic practice tests with Gemini for this video!
+            </p>
+          </div>
+
+          <!-- Ask Gemini Box -->
+          <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px;">
+            <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-bright); margin-bottom: 6px;">
+              💬 Have a question about this video? Ask Gemini:
+            </div>
+            <div class="gemini-ask-box">
+              <input type="text" id="gemini-ask-input" class="gemini-input" placeholder="e.g. Why did she use lsof instead of ps aux here?">
+              <button class="btn btn-secondary" onclick="askGeminiQuestion()">Ask Gemini</button>
+            </div>
+            <div id="gemini-answer-box" class="gemini-response"></div>
+          </div>
+        </div>
+
+        <!-- Quick Test Tab Content -->
+        <div id="tab-quiz" class="tab-content">
           <div id="quiz-container">
-            <!-- Quizzes dynamically injected -->
+            <!-- Fallback quizzes dynamically injected -->
           </div>
         </div>
 
         <!-- Overview Tab Content -->
         <div id="tab-overview" class="tab-content">
           <p id="lesson-overview-text" style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
-            Watch the video lesson above, then switch over to the <strong>Interactive Test</strong> tab to answer 3 quick questions and log your completion!
+            Watch the video lesson above, then use the <strong>Gemini AI Drill</strong> tab to test yourself with dynamic scenario questions!
           </p>
         </div>
       </div>
@@ -674,6 +801,19 @@
   </div>
 
   <script>
+    // Safe storage of API Key: Read from URL hash #key=... or localStorage
+    if (window.location.hash.startsWith('#key=')) {
+      const incomingKey = window.location.hash.replace('#key=', '').trim();
+      if (incomingKey) {
+        localStorage.setItem('gemini_api_key', incomingKey);
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+      }
+    }
+
+    function getApiKey() {
+      return localStorage.getItem('gemini_api_key') || '';
+    }
+
     const videos = [
       {
         id: "fwP2JW_VnZI",
@@ -718,12 +858,6 @@
             options: ["User home folder", "The root directory (base of everything)", "Temporary storage", "Trash folder"],
             answer: 1,
             exp: "The single forward slash '/' is the Root directory from which all other directories branch."
-          },
-          {
-            q: "What is typically stored in the '/var' directory?",
-            options: ["Installed apps and games", "Variable files that constantly grow, like logs and databases", "Bootloader files only", "Source code files only"],
-            answer: 1,
-            exp: "/var holds 'variable' data such as /var/log, mail queues, and database files."
           }
         ]
       },
@@ -738,12 +872,6 @@
             options: ["Linux is cheaper to buy at BestBuy", "Linux is lightweight, modular, rock-solid, and easily automated via CLI", "Linux has better video games", "Linux cannot connect to the internet"],
             answer: 1,
             exp: "Linux requires no GUI overhead, uses minimal RAM, and can be completely scripted via code."
-          },
-          {
-            q: "What is the primary command-line interpreter (shell) found on most modern Linux servers?",
-            options: ["PowerShell only", "Command Prompt (CMD)", "Bash (Bourne Again Shell)", "Finder"],
-            answer: 2,
-            exp: "Bash is the default shell on almost all Linux distributions."
           }
         ]
       },
@@ -764,12 +892,6 @@
             options: ["cd up", "cd ..", "cd /", "back"],
             answer: 1,
             exp: "'cd ..' takes you one directory up in the hierarchy."
-          },
-          {
-            q: "Which flag on 'ls' reveals hidden files (files beginning with a dot)?",
-            options: ["ls -h", "ls -la", "ls -x", "ls -hide"],
-            answer: 1,
-            exp: "The '-a' flag in 'ls -la' tells the terminal to show all files, including hidden dotfiles."
           }
         ]
       },
@@ -784,12 +906,6 @@
             options: ["chown", "chmod", "perm", "setfile"],
             answer: 1,
             exp: "chmod stands for 'Change Mode' and modifies file permission bits."
-          },
-          {
-            q: "How do you search for lines containing the word 'ERROR' inside a file called server.log?",
-            options: ["find ERROR in server.log", "grep 'ERROR' server.log", "search server.log ERROR", "cat -s ERROR server.log"],
-            answer: 1,
-            exp: "grep is the universal text searching tool in Linux."
           }
         ]
       },
@@ -804,12 +920,6 @@
             options: ["git copy", "git clone <url>", "git download", "git init"],
             answer: 1,
             exp: "git clone downloads the repository and history to your local machine."
-          },
-          {
-            q: "When working with a friend or team, how do you submit changes for review before merging?",
-            options: ["Send an email zip", "Open a Pull Request (PR)", "Force push to main branch", "Delete the repository"],
-            answer: 1,
-            exp: "A Pull Request (PR) allows your teammate to review, comment on, and approve code changes safely."
           }
         ]
       }
@@ -842,7 +952,10 @@
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-      if (tabName === 'quiz') {
+      if (tabName === 'gemini') {
+        document.querySelector(".tab-btn.gemini-tab").classList.add('active');
+        document.getElementById('tab-gemini').classList.add('active');
+      } else if (tabName === 'quiz') {
         document.querySelector("button[onclick=\"switchTab('quiz')\"]").classList.add('active');
         document.getElementById('tab-quiz').classList.add('active');
       } else {
@@ -851,13 +964,194 @@
       }
     }
 
+    function promptApiKey() {
+      const current = localStorage.getItem('gemini_api_key') || '';
+      const input = prompt('Enter or update your Google Gemini API Key:\n(Saved only in your private browser localStorage)', current);
+      if (input !== null) {
+        localStorage.setItem('gemini_api_key', input.trim());
+        alert('✅ API Key updated in your browser storage!');
+      }
+    }
+
+    function saveApiKeyFromInput() {
+      const val = document.getElementById('modal-api-key-input').value.trim();
+      if (val) {
+        localStorage.setItem('gemini_api_key', val);
+        alert('✅ API Key saved securely to your browser!');
+        generateGeminiQuestions(5);
+      }
+    }
+
+    // --- Gemini AI Dynamic Generation ---
+    async function generateGeminiQuestions(count) {
+      const v = videos[currentVideoIdx];
+      const spinner = document.getElementById('gemini-loading');
+      const container = document.getElementById('gemini-quiz-container');
+
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        container.innerHTML = `
+          <div style="background: rgba(163, 113, 247, 0.1); border: 1px solid rgba(163, 113, 247, 0.3); border-radius: 8px; padding: 18px; text-align: center; margin-top: 10px;">
+            <div style="font-weight: 600; color: #d2a8ff; margin-bottom: 6px;">🔑 Gemini API Key Needed</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+              Enter your Gemini API key below to activate AI generation. It is saved only in your private browser memory.
+            </p>
+            <div style="display: flex; gap: 8px; max-width: 440px; margin: 0 auto;">
+              <input type="password" id="modal-api-key-input" class="gemini-input" placeholder="Paste your Gemini API key here">
+              <button class="btn btn-gemini" onclick="saveApiKeyFromInput()">Save Key</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      spinner.style.display = 'block';
+      container.innerHTML = '';
+      const prompt = `You are a supportive, expert DevOps and Linux instructor.
+Generate ${count} practical, scenario-based multiple-choice questions for beginners based on this video lesson:
+Title: "${v.title}" by ${v.creator}
+Description: "${v.desc}"
+
+Rules:
+1. Questions must test practical terminal knowledge, commands, flags, and mental models (e.g. troubleshooting logs, permissions, file navigation).
+2. Exactly 4 options per question.
+3. Keep questions realistic and grounded.
+4. Output MUST be ONLY a valid raw JSON array of objects, with no markdown code blocks, no backticks, and no extra prose.
+
+JSON Schema:
+[
+  {
+    "q": "Scenario question text here...",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "answer": 0,
+    "exp": "Clear plain English explanation..."
+  }
+]`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        });
+
+        const data = await res.json();
+        spinner.style.display = 'none';
+
+        if (data.error) {
+          container.innerHTML = `<div style="color: #ff7b72; padding: 14px; background: rgba(218,54,51,0.1); border-radius: 8px;">
+            ⚠️ Gemini API Error: ${data.error.message}
+          </div>`;
+          return;
+        }
+
+        let rawText = data.candidates[0].content.parts[0].text.trim();
+        // Clean markdown backticks if returned
+        if (rawText.startsWith('```')) {
+          rawText = rawText.replace(/^```[a-z]*\n?/i, '').replace(/```$/i, '').trim();
+        }
+
+        const questions = JSON.parse(rawText);
+        renderDynamicGeminiQuiz(questions, container);
+
+      } catch (err) {
+        spinner.style.display = 'none';
+        container.innerHTML = `<div style="color: #ff7b72; padding: 14px; background: rgba(218,54,51,0.1); border-radius: 8px;">
+          ⚠️ Error connecting to Gemini: ${err.message}. Please check your connection.
+        </div>`;
+      }
+    }
+
+    function renderDynamicGeminiQuiz(questions, container) {
+      container.innerHTML = '';
+      questions.forEach((qObj, idx) => {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+        card.innerHTML = `
+          <div class="quiz-q">Question ${idx + 1}: ${qObj.q}</div>
+          <div class="quiz-options">
+            ${qObj.options.map((opt, optIdx) => `
+              <button class="quiz-opt" onclick="checkGeminiAnswer(${idx}, ${optIdx}, ${qObj.answer}, this, '${encodeURIComponent(qObj.exp)}')">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+          <div class="quiz-explanation" id="gemini-exp-${idx}"></div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function checkGeminiAnswer(qIdx, selectedIdx, correctIdx, btnElem, encodedExp) {
+      const parent = btnElem.parentElement;
+      const allBtns = parent.querySelectorAll('.quiz-opt');
+      allBtns.forEach(b => b.disabled = true);
+
+      const expElem = document.getElementById(`gemini-exp-${qIdx}`);
+      if (expElem) {
+        expElem.style.display = 'block';
+        expElem.innerHTML = `💡 <strong>Explanation:</strong> ${decodeURIComponent(encodedExp)}`;
+      }
+
+      if (selectedIdx === correctIdx) {
+        btnElem.classList.add('correct');
+      } else {
+        btnElem.classList.add('incorrect');
+        allBtns[correctIdx].classList.add('correct');
+      }
+
+      // Automatically mark lesson completed if student practices
+      if (!completedLessons.includes(currentVideoIdx)) {
+        completedLessons.push(currentVideoIdx);
+        saveProgress();
+      }
+    }
+
+    async function askGeminiQuestion() {
+      const input = document.getElementById('gemini-ask-input');
+      const question = input.value.trim();
+      const answerBox = document.getElementById('gemini-answer-box');
+      if (!question) return;
+
+      answerBox.style.display = 'block';
+      answerBox.textContent = 'Thinking...';
+
+      const v = videos[currentVideoIdx];
+      const apiKey = getApiKey();
+      const prompt = `You are a friendly, clear DevOps mentor. The user is currently learning Linux & DevOps and watching: "${v.title}".
+User's Question: "${question}"
+Please answer in 2 to 3 concise, practical sentences using plain English.`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        });
+
+        const data = await res.json();
+        if (data.error) {
+          answerBox.textContent = `Error: ${data.error.message}`;
+        } else {
+          answerBox.textContent = data.candidates[0].content.parts[0].text;
+        }
+      } catch (err) {
+        answerBox.textContent = `Error: ${err.message}`;
+      }
+    }
+
+    // Static fallback quiz rendering
     function renderQuiz(videoIdx) {
       const v = videos[videoIdx];
       const container = document.getElementById('quiz-container');
       container.innerHTML = '';
 
       if (!v.questions || v.questions.length === 0) {
-        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">No quiz questions for this video yet.</p>';
+        container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.88rem;">Use the Gemini AI Drill tab for live questions!</p>';
         return;
       }
 
@@ -897,14 +1191,9 @@
         allBtns[qObj.answer].classList.add('correct');
       }
 
-      // If all questions answered for this video, mark lesson completed
-      const totalQuestions = videos[videoIdx].questions.length;
-      const answeredInDOM = document.querySelectorAll('#quiz-container .quiz-opt:disabled').length / (qObj.options.length);
-      if (answeredInDOM >= totalQuestions) {
-        if (!completedLessons.includes(videoIdx)) {
-          completedLessons.push(videoIdx);
-          saveProgress();
-        }
+      if (!completedLessons.includes(videoIdx)) {
+        completedLessons.push(videoIdx);
+        saveProgress();
       }
     }
 
@@ -922,8 +1211,17 @@
         item.classList.toggle('active', idx === index);
       });
 
+      // Reset dynamic quiz container
+      document.getElementById('gemini-quiz-container').innerHTML = `
+        <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px 0;">
+          Click <strong>"✨ Generate 5 Questions"</strong> or <strong>"🔥 Generate 10 Scenarios"</strong> above to generate dynamic practice tests with Gemini for <em>"${v.title}"</em>!
+        </p>
+      `;
+      document.getElementById('gemini-answer-box').style.display = 'none';
+      document.getElementById('gemini-ask-input').value = '';
+
       renderQuiz(index);
-      switchTab('quiz');
+      switchTab('gemini');
     }
 
     function exportProgress() {
