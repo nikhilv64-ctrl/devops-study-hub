@@ -39,6 +39,100 @@
       padding: 16px;
     }
 
+    /* Auth Overlay Gate */
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(13, 17, 23, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+
+    .auth-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+
+    .auth-card h2 {
+      font-size: 1.3rem;
+      color: var(--text-bright);
+      margin-bottom: 6px;
+    }
+
+    .auth-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text-bright);
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .login-error {
+      color: #ff7b72;
+      font-size: 0.82rem;
+      margin-bottom: 14px;
+      display: none;
+      text-align: center;
+    }
+
+    .btn-block {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* Main Dashboard Layout */
+    #main-dashboard {
+      display: none;
+    }
+
     header {
       max-width: 1400px;
       margin: 0 auto 16px auto;
@@ -272,7 +366,6 @@
       white-space: nowrap;
     }
 
-    /* Gemini Controls Panel */
     .gemini-header-box {
       background: rgba(163, 113, 247, 0.08);
       border: 1px solid rgba(163, 113, 247, 0.25);
@@ -579,239 +672,293 @@
 </head>
 <body>
 
-  <header>
-    <div class="title-group">
-      <h1>☁️ DevOps & Linux Hub</h1>
-      <span class="user-badge">👤 Student: Nikhil Verma</span>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-secondary" onclick="exportProgress()">
-        📋 Copy Progress for Antigravity
-      </button>
-      <a class="btn btn-primary" target="_blank" href="https://www.youtube.com/watch_videos?video_ids=fwP2JW_VnZI,rrB13utjYV4,l9YxTXDiiFY,VbEx7B_PTOE,iwolPf6kN-k,8944biinHgE">
-        ▶️ YouTube Queue
-      </a>
-      <a class="btn btn-secondary" target="_blank" href="https://killercoda.com">
-        💻 Terminal Lab
-      </a>
-    </div>
-  </header>
-
-  <!-- Progress Bar -->
-  <div class="progress-banner">
-    <div class="progress-info">
-      <span id="streak-indicator">🔥 Day 1 Active</span>
-      <div class="progress-bar-wrap">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-      <span id="progress-text" style="font-size: 0.85rem; font-weight: 600;">0 of 6 Lessons Completed</span>
-    </div>
-    <div style="font-size: 0.85rem; color: var(--text-muted);">
-      Target: Phase 1 (Week 1) Linux Basics
+  <!-- Fullscreen Login Gate -->
+  <div id="auth-overlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-icon">🔒</div>
+      <h2>DevOps Learning Portal</h2>
+      <p>Enter your credentials to unlock your study hub</p>
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" name="username" class="form-input" autocomplete="username" required placeholder="Username" value="nikhil">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" class="form-input" autocomplete="current-password" required placeholder="Password">
+        </div>
+        <div id="login-error" class="login-error">⚠️ Incorrect username or password.</div>
+        <button type="submit" class="btn btn-primary btn-block">Unlock Portal →</button>
+      </form>
     </div>
   </div>
 
-  <div class="container">
-    <!-- Main Video & Interactive Panel -->
-    <div class="player-section">
-      <div class="video-wrapper">
-        <iframe 
-          id="video-frame" 
-          src="https://www.youtube.com/embed/fwP2JW_VnZI?rel=0" 
-          title="DevOps Video Lesson"
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-        </iframe>
+  <!-- Main Protected Dashboard -->
+  <div id="main-dashboard">
+    <header>
+      <div class="title-group">
+        <h1>☁️ DevOps & Linux Hub</h1>
+        <span class="user-badge">👤 Student: Nikhil Verma</span>
       </div>
-      
-      <div class="interactive-panel">
-        <div class="video-details-header">
-          <div>
-            <h2 id="current-title">Linux Commands in 30 Mins (Real-World Example)</h2>
-            <p id="current-desc" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">
-              By TechWorld with Nana
+      <div class="header-actions">
+        <button class="btn btn-secondary" onclick="exportProgress()">
+          📋 Copy Progress
+        </button>
+        <button class="btn btn-secondary" onclick="lockPortal()" title="Lock Portal">
+          🔒 Lock
+        </button>
+        <a class="btn btn-primary" target="_blank" href="https://www.youtube.com/watch_videos?video_ids=fwP2JW_VnZI,rrB13utjYV4,l9YxTXDiiFY,VbEx7B_PTOE,iwolPf6kN-k,8944biinHgE">
+          ▶️ YouTube Queue
+        </a>
+        <a class="btn btn-secondary" target="_blank" href="https://killercoda.com">
+          💻 Terminal Lab
+        </a>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-banner">
+      <div class="progress-info">
+        <span id="streak-indicator">🔥 Day 1 Active</span>
+        <div class="progress-bar-wrap">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span id="progress-text" style="font-size: 0.85rem; font-weight: 600;">0 of 6 Lessons Completed</span>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-muted);">
+        Target: Phase 1 (Week 1) Linux Basics
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Main Video & Interactive Panel -->
+      <div class="player-section">
+        <div class="video-wrapper">
+          <iframe 
+            id="video-frame" 
+            src="https://www.youtube.com/embed/fwP2JW_VnZI?rel=0" 
+            title="DevOps Video Lesson"
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen>
+          </iframe>
+        </div>
+        
+        <div class="interactive-panel">
+          <div class="video-details-header">
+            <div>
+              <h2 id="current-title">Linux Commands in 30 Mins (Real-World Example)</h2>
+              <p id="current-desc" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">
+                By TechWorld with Nana
+              </p>
+            </div>
+            <a id="yt-external-link" class="yt-direct-btn" href="https://www.youtube.com/watch?v=fwP2JW_VnZI" target="_blank">
+              ↗ Open in App
+            </a>
+          </div>
+
+          <div class="tab-nav">
+            <button class="tab-btn gemini-tab active" onclick="switchTab('gemini')">✨ Gemini AI Drill</button>
+            <button class="tab-btn" onclick="switchTab('quiz')">📝 Quick Test</button>
+            <button class="tab-btn" onclick="switchTab('overview')">📖 Lesson Notes</button>
+          </div>
+
+          <!-- Gemini AI Tab Content -->
+          <div id="tab-gemini" class="tab-content active">
+            <div class="gemini-header-box">
+              <div class="gemini-status">
+                <span>🟢</span>
+                <span id="gemini-status-label">Gemini AI Ready (3.5-Flash)</span>
+              </div>
+              <div class="gemini-actions">
+                <button class="btn btn-gemini" onclick="generateGeminiQuestions(5)">
+                  ✨ Generate 5 Questions
+                </button>
+                <button class="btn btn-secondary" onclick="generateGeminiQuestions(10)">
+                  🔥 Generate 10 Scenarios
+                </button>
+              </div>
+            </div>
+
+            <!-- Spinner -->
+            <div id="gemini-loading" class="loading-spinner">
+              ⏳ Gemini is analyzing this video and generating custom interactive questions...
+            </div>
+
+            <!-- Dynamic Questions Container -->
+            <div id="gemini-quiz-container">
+              <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px 0;">
+                Click <strong>"✨ Generate 5 Questions"</strong> or <strong>"🔥 Generate 10 Scenarios"</strong> above to generate dynamic practice tests with Gemini for this video!
+              </p>
+            </div>
+
+            <!-- Ask Gemini Box -->
+            <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px;">
+              <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-bright); margin-bottom: 6px;">
+                💬 Have a question about this video? Ask Gemini:
+              </div>
+              <div class="gemini-ask-box">
+                <input type="text" id="gemini-ask-input" class="gemini-input" placeholder="e.g. Why did she use lsof instead of ps aux here?">
+                <button class="btn btn-secondary" onclick="askGeminiQuestion()">Ask Gemini</button>
+              </div>
+              <div id="gemini-answer-box" class="gemini-response"></div>
+            </div>
+          </div>
+
+          <!-- Quick Test Tab Content -->
+          <div id="tab-quiz" class="tab-content">
+            <div id="quiz-container"></div>
+          </div>
+
+          <!-- Overview Tab Content -->
+          <div id="tab-overview" class="tab-content">
+            <p id="lesson-overview-text" style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
+              Watch the video lesson above, then use the <strong>Gemini AI Drill</strong> tab to test yourself with dynamic scenario questions!
             </p>
           </div>
-          <a id="yt-external-link" class="yt-direct-btn" href="https://www.youtube.com/watch?v=fwP2JW_VnZI" target="_blank">
-            ↗ Open in App
-          </a>
         </div>
+      </div>
 
-        <div class="tab-nav">
-          <button class="tab-btn gemini-tab active" onclick="switchTab('gemini')">✨ Gemini AI Drill</button>
-          <button class="tab-btn" onclick="switchTab('quiz')">📝 Quick Test</button>
-          <button class="tab-btn" onclick="switchTab('overview')">📖 Lesson Notes</button>
+      <!-- Playlist Menu -->
+      <div class="playlist-section">
+        <div class="section-title">
+          <span>Week 1 Curriculum</span>
+          <span class="badge" id="completed-badge">0 / 6 Done</span>
         </div>
+        <div class="playlist-items" id="playlist-list"></div>
+      </div>
 
-        <!-- Gemini AI Tab Content -->
-        <div id="tab-gemini" class="tab-content active">
-          <div class="gemini-header-box">
-            <div class="gemini-status">
-              <span>🟢</span>
-              <span id="gemini-status-label">Gemini AI Connected (3.5-Flash)</span>
-            </div>
-            <div class="gemini-actions">
-              <button class="btn btn-gemini" onclick="generateGeminiQuestions(5)">
-                ✨ Generate 5 Questions
-              </button>
-              <button class="btn btn-secondary" onclick="generateGeminiQuestions(10)">
-                🔥 Generate 10 Scenarios
-              </button>
-              <button class="btn btn-secondary" onclick="promptApiKey()" title="Configure API Key">
-                ⚙️ Key
-              </button>
-            </div>
+      <!-- Practice Games -->
+      <div class="games-grid">
+        <div class="section-title">
+          <span>🎮 Hands-on Games & Labs</span>
+        </div>
+        <div class="cards-row">
+          <div class="card">
+            <div class="card-title">SadServers</div>
+            <p class="card-desc">Troubleshoot broken real-world Linux servers. Try "Saint John" again using what you learned.</p>
+            <a class="card-link" href="https://sadservers.com" target="_blank">Launch SadServers →</a>
           </div>
-
-          <!-- Spinner -->
-          <div id="gemini-loading" class="loading-spinner">
-            ⏳ Gemini is analyzing this video and generating custom interactive questions...
+          <div class="card">
+            <div class="card-title">Killercoda</div>
+            <p class="card-desc">Instant cloud Linux and Docker terminals inside your browser. Works seamlessly on iPad touchscreens.</p>
+            <a class="card-link" href="https://killercoda.com" target="_blank">Launch Killercoda →</a>
           </div>
-
-          <!-- Dynamic Questions Container -->
-          <div id="gemini-quiz-container">
-            <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px 0;">
-              Click <strong>"✨ Generate 5 Questions"</strong> or <strong>"🔥 Generate 10 Scenarios"</strong> above to generate dynamic practice tests with Gemini for this video!
-            </p>
+          <div class="card">
+            <div class="card-title">OverTheWire: Bandit</div>
+            <p class="card-desc">Level-by-level terminal game designed for complete beginners to learn commands progressively.</p>
+            <a class="card-link" href="https://overthewire.org/wargames/bandit/" target="_blank">Play Bandit 0–10 →</a>
           </div>
-
-          <!-- Ask Gemini Box -->
-          <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px;">
-            <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-bright); margin-bottom: 6px;">
-              💬 Have a question about this video? Ask Gemini:
-            </div>
-            <div class="gemini-ask-box">
-              <input type="text" id="gemini-ask-input" class="gemini-input" placeholder="e.g. Why did she use lsof instead of ps aux here?">
-              <button class="btn btn-secondary" onclick="askGeminiQuestion()">Ask Gemini</button>
-            </div>
-            <div id="gemini-answer-box" class="gemini-response"></div>
+          <div class="card">
+            <div class="card-title">Linux Journey</div>
+            <p class="card-desc">5-minute visual micro-lessons explaining fundamental concepts before jumping into the terminal.</p>
+            <a class="card-link" href="https://labex.io/linuxjourney" target="_blank">Read Lessons →</a>
           </div>
         </div>
+      </div>
 
-        <!-- Quick Test Tab Content -->
-        <div id="tab-quiz" class="tab-content">
-          <div id="quiz-container">
-            <!-- Fallback quizzes dynamically injected -->
-          </div>
+      <!-- Quick Reference -->
+      <div class="cheatsheet-section">
+        <div class="section-title">
+          <span>⚡ Week 1 Quick Reference Card</span>
         </div>
-
-        <!-- Overview Tab Content -->
-        <div id="tab-overview" class="tab-content">
-          <p id="lesson-overview-text" style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
-            Watch the video lesson above, then use the <strong>Gemini AI Drill</strong> tab to test yourself with dynamic scenario questions!
-          </p>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Plain English Meaning</th>
+              <th>Example / Common Use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>pwd</code></td>
+              <td>"Where am I right now?"</td>
+              <td>Prints current directory path</td>
+            </tr>
+            <tr>
+              <td><code>ls -la</code></td>
+              <td>"Show me everything here"</td>
+              <td>Lists all files, permissions, and hidden dotfiles</td>
+            </tr>
+            <tr>
+              <td><code>cd &lt;folder&gt;</code></td>
+              <td>"Go inside this folder"</td>
+              <td><code>cd /var/log</code> (or <code>cd ..</code> to go up one level)</td>
+            </tr>
+            <tr>
+              <td><code>tail -f &lt;file&gt;</code></td>
+              <td>"Stream logs live"</td>
+              <td><code>tail -f /var/log/bad.log</code> (Exit with <code>Ctrl + C</code>)</td>
+            </tr>
+            <tr>
+              <td><code>lsof &lt;file&gt;</code></td>
+              <td>"Who is using this file right now?"</td>
+              <td><code>lsof /var/log/bad.log</code> (finds the process ID / PID)</td>
+            </tr>
+            <tr>
+              <td><code>kill &lt;PID&gt;</code></td>
+              <td>"Force stop this program"</td>
+              <td><code>kill 595</code> (no brackets!)</td>
+            </tr>
+            <tr>
+              <td><code>grep "keyword" &lt;file&gt;</code></td>
+              <td>"Search inside this file for text"</td>
+              <td><code>grep "ERROR" server.log</code></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-
-    <!-- Playlist Menu -->
-    <div class="playlist-section">
-      <div class="section-title">
-        <span>Week 1 Curriculum</span>
-        <span class="badge" id="completed-badge">0 / 6 Done</span>
-      </div>
-      <div class="playlist-items" id="playlist-list">
-        <!-- Injected via JavaScript -->
-      </div>
-    </div>
-
-    <!-- Practice Games -->
-    <div class="games-grid">
-      <div class="section-title">
-        <span>🎮 Hands-on Games & Labs</span>
-      </div>
-      <div class="cards-row">
-        <div class="card">
-          <div class="card-title">SadServers</div>
-          <p class="card-desc">Troubleshoot broken real-world Linux servers. Try "Saint John" again using what you learned.</p>
-          <a class="card-link" href="https://sadservers.com" target="_blank">Launch SadServers →</a>
-        </div>
-        <div class="card">
-          <div class="card-title">Killercoda</div>
-          <p class="card-desc">Instant cloud Linux and Docker terminals inside your browser. Works seamlessly on iPad touchscreens.</p>
-          <a class="card-link" href="https://killercoda.com" target="_blank">Launch Killercoda →</a>
-        </div>
-        <div class="card">
-          <div class="card-title">OverTheWire: Bandit</div>
-          <p class="card-desc">Level-by-level terminal game designed for complete beginners to learn commands progressively.</p>
-          <a class="card-link" href="https://overthewire.org/wargames/bandit/" target="_blank">Play Bandit 0–10 →</a>
-        </div>
-        <div class="card">
-          <div class="card-title">Linux Journey</div>
-          <p class="card-desc">5-minute visual micro-lessons explaining fundamental concepts before jumping into the terminal.</p>
-          <a class="card-link" href="https://labex.io/linuxjourney" target="_blank">Read Lessons →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quick Reference -->
-    <div class="cheatsheet-section">
-      <div class="section-title">
-        <span>⚡ Week 1 Quick Reference Card</span>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Command</th>
-            <th>Plain English Meaning</th>
-            <th>Example / Common Use</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>pwd</code></td>
-            <td>"Where am I right now?"</td>
-            <td>Prints current directory path</td>
-          </tr>
-          <tr>
-            <td><code>ls -la</code></td>
-            <td>"Show me everything here"</td>
-            <td>Lists all files, permissions, and hidden dotfiles</td>
-          </tr>
-          <tr>
-            <td><code>cd &lt;folder&gt;</code></td>
-            <td>"Go inside this folder"</td>
-            <td><code>cd /var/log</code> (or <code>cd ..</code> to go up one level)</td>
-          </tr>
-          <tr>
-            <td><code>tail -f &lt;file&gt;</code></td>
-            <td>"Stream logs live"</td>
-            <td><code>tail -f /var/log/bad.log</code> (Exit with <code>Ctrl + C</code>)</td>
-          </tr>
-          <tr>
-            <td><code>lsof &lt;file&gt;</code></td>
-            <td>"Who is using this file right now?"</td>
-            <td><code>lsof /var/log/bad.log</code> (finds the process ID / PID)</td>
-          </tr>
-          <tr>
-            <td><code>kill &lt;PID&gt;</code></td>
-            <td>"Force stop this program"</td>
-            <td><code>kill 595</code> (no brackets!)</td>
-          </tr>
-          <tr>
-            <td><code>grep "keyword" &lt;file&gt;</code></td>
-            <td>"Search inside this file for text"</td>
-            <td><code>grep "ERROR" server.log</code></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
   <script>
-    // Safe storage of API Key: Read from URL hash #key=... or localStorage
-    if (window.location.hash.startsWith('#key=')) {
-      const incomingKey = window.location.hash.replace('#key=', '').trim();
-      if (incomingKey) {
-        localStorage.setItem('gemini_api_key', incomingKey);
-        history.replaceState(null, null, window.location.pathname + window.location.search);
+    // --- Secure Authentication & Key Retrieval ---
+    const AUTH_USER = "nikhil";
+    const AUTH_PASS = "DevOps@Nikhil2026!";
+    const _E = "QVEuQWI4Uk42S1JzWWJlelpWV1l6TDlGNEdBUFRHR2ZndVZIa3N2VnhWbTE1cmxqd1VwbGc=";
+
+    function checkAuth() {
+      const isAuth = sessionStorage.getItem('devops_auth') === 'true' || localStorage.getItem('devops_auth') === 'true';
+      if (isAuth) {
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('main-dashboard').style.display = 'block';
+      } else {
+        document.getElementById('auth-overlay').style.display = 'flex';
+        document.getElementById('main-dashboard').style.display = 'none';
       }
     }
 
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('login-username').value.trim().toLowerCase();
+      const p = document.getElementById('login-password').value.trim();
+      const err = document.getElementById('login-error');
+
+      if (u === AUTH_USER && p === AUTH_PASS) {
+        sessionStorage.setItem('devops_auth', 'true');
+        localStorage.setItem('devops_auth', 'true');
+        err.style.display = 'none';
+        checkAuth();
+      } else {
+        err.style.display = 'block';
+      }
+    }
+
+    function lockPortal() {
+      sessionStorage.removeItem('devops_auth');
+      localStorage.removeItem('devops_auth');
+      document.getElementById('login-password').value = '';
+      checkAuth();
+    }
+
     function getApiKey() {
-      return localStorage.getItem('gemini_api_key') || '';
+      try {
+        return atob(_E);
+      } catch (e) {
+        return '';
+      }
     }
 
     const videos = [
@@ -964,49 +1111,16 @@
       }
     }
 
-    function promptApiKey() {
-      const current = localStorage.getItem('gemini_api_key') || '';
-      const input = prompt('Enter or update your Google Gemini API Key:\n(Saved only in your private browser localStorage)', current);
-      if (input !== null) {
-        localStorage.setItem('gemini_api_key', input.trim());
-        alert('✅ API Key updated in your browser storage!');
-      }
-    }
-
-    function saveApiKeyFromInput() {
-      const val = document.getElementById('modal-api-key-input').value.trim();
-      if (val) {
-        localStorage.setItem('gemini_api_key', val);
-        alert('✅ API Key saved securely to your browser!');
-        generateGeminiQuestions(5);
-      }
-    }
-
     // --- Gemini AI Dynamic Generation ---
     async function generateGeminiQuestions(count) {
       const v = videos[currentVideoIdx];
       const spinner = document.getElementById('gemini-loading');
       const container = document.getElementById('gemini-quiz-container');
 
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        container.innerHTML = `
-          <div style="background: rgba(163, 113, 247, 0.1); border: 1px solid rgba(163, 113, 247, 0.3); border-radius: 8px; padding: 18px; text-align: center; margin-top: 10px;">
-            <div style="font-weight: 600; color: #d2a8ff; margin-bottom: 6px;">🔑 Gemini API Key Needed</div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
-              Enter your Gemini API key below to activate AI generation. It is saved only in your private browser memory.
-            </p>
-            <div style="display: flex; gap: 8px; max-width: 440px; margin: 0 auto;">
-              <input type="password" id="modal-api-key-input" class="gemini-input" placeholder="Paste your Gemini API key here">
-              <button class="btn btn-gemini" onclick="saveApiKeyFromInput()">Save Key</button>
-            </div>
-          </div>
-        `;
-        return;
-      }
-
       spinner.style.display = 'block';
       container.innerHTML = '';
+
+      const apiKey = getApiKey();
       const prompt = `You are a supportive, expert DevOps and Linux instructor.
 Generate ${count} practical, scenario-based multiple-choice questions for beginners based on this video lesson:
 Title: "${v.title}" by ${v.creator}
@@ -1048,7 +1162,6 @@ JSON Schema:
         }
 
         let rawText = data.candidates[0].content.parts[0].text.trim();
-        // Clean markdown backticks if returned
         if (rawText.startsWith('```')) {
           rawText = rawText.replace(/^```[a-z]*\n?/i, '').replace(/```$/i, '').trim();
         }
@@ -1102,7 +1215,6 @@ JSON Schema:
         allBtns[correctIdx].classList.add('correct');
       }
 
-      // Automatically mark lesson completed if student practices
       if (!completedLessons.includes(currentVideoIdx)) {
         completedLessons.push(currentVideoIdx);
         saveProgress();
@@ -1144,7 +1256,6 @@ Please answer in 2 to 3 concise, practical sentences using plain English.`;
       }
     }
 
-    // Static fallback quiz rendering
     function renderQuiz(videoIdx) {
       const v = videos[videoIdx];
       const container = document.getElementById('quiz-container');
@@ -1211,7 +1322,6 @@ Please answer in 2 to 3 concise, practical sentences using plain English.`;
         item.classList.toggle('active', idx === index);
       });
 
-      // Reset dynamic quiz container
       document.getElementById('gemini-quiz-container').innerHTML = `
         <p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px 0;">
           Click <strong>"✨ Generate 5 Questions"</strong> or <strong>"🔥 Generate 10 Scenarios"</strong> above to generate dynamic practice tests with Gemini for <em>"${v.title}"</em>!
@@ -1256,7 +1366,8 @@ Please answer in 2 to 3 concise, practical sentences using plain English.`;
       playlistContainer.appendChild(item);
     });
 
-    // Initial render
+    // Check login state on load
+    checkAuth();
     loadVideo(0);
     updateProgressUI();
   </script>
